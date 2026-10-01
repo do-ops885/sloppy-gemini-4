@@ -4,9 +4,10 @@ name: Update REAL WIRE
 # (the bot token cannot push into .github/workflows — needs a human or an app
 # with the workflows permission; via web UI: Actions -> New workflow -> paste).
 #
-# Keeps the parody terminal's REAL WIRE section fed with actual, labeled
-# Gemini 4 Pro headlines. Runs every 6 hours + on demand; commits wire.json
-# back to main, which also retriggers the GitHub Pages deploy.
+# Keeps the parody terminal fed with reality: REAL WIRE headlines (wire.json)
+# and REAL ORACLE live prices from Polymarket/Kalshi (real-markets.json).
+# Runs every 6 hours + on demand; commits back to main, which also retriggers
+# the GitHub Pages deploy.
 
 on:
   schedule:
@@ -35,14 +36,17 @@ jobs:
       - name: Fetch latest Gemini 4 Pro news -> wire.json
         run: node scripts/update-wire.mjs
 
+      - name: Fetch real prediction-market prices -> real-markets.json
+        run: node scripts/update-markets.mjs
+
       - name: Commit if the wire changed
         run: |
-          if git diff --quiet -- wire.json; then
-            echo "Wire unchanged — nothing to commit"
+          if git diff --quiet -- wire.json real-markets.json; then
+            echo "Feeds unchanged — nothing to commit"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add wire.json
-          git commit -m "chore(wire): sync latest Gemini 4 Pro news [skip ci]"
+          git add wire.json real-markets.json
+          git commit -m "chore(feeds): sync wire + real oracle prices [skip ci]"
           git push

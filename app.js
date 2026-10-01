@@ -762,7 +762,43 @@ function closeDisclosure() {
   m.classList.remove('open');
   setTimeout(() => { m.hidden = true; }, REDUCED ? 160 : 250);
 }
-window.__vaporware = { openDisclosure, closeDisclosure }; // test hook
+window.__vaporware = { openDisclosure, closeDisclosure, renderRealOracle }; // test hook
+
+
+/* ---------- 11c. REAL ORACLE (live public prices; data, not wagers) ---------- */
+async function loadRealOracle() {
+  let data = null;
+  try {
+    const res = await fetch('real-markets.json', { cache: 'no-store' });
+    if (res.ok) data = await res.json();
+  } catch (e) { /* file:// or offline -> card stays hidden */ }
+  if (!data || !Array.isArray(data.items) || !data.items.length) return;
+  renderRealOracle(data.items, data.synced);
+}
+
+function renderRealOracle(items, synced) {
+  el.oracleList.innerHTML = '';
+  items.forEach((it) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<button class="oracle-row">
+      <span class="oracle-plat ${it.platform.toLowerCase()}">${it.platform.toUpperCase()}</span>
+      <span class="oracle-title">${it.title}</span>
+      <span class="oracle-pct">${it.yesPct}%</span>
+      <span class="oracle-vol">VOL ${fmt$(it.volume || 0)}</span>
+    </button>`;
+    li.querySelector('button').addEventListener('click', () => openDisclosure({
+      id: it.platform.toLowerCase(),
+      name: it.platform,
+      kind: `${it.platform} prediction market`,
+      url: it.url,
+      minAge: 18,
+    }));
+    el.oracleList.appendChild(li);
+  });
+  el.oracleCard.hidden = false;
+  if (synced) el.oracleSync.textContent = synced.slice(0, 10);
+  icons();
+}
 
 /* ---------- 12. Wiring & init ---------- */
 function grabEls() {
@@ -795,6 +831,9 @@ function grabEls() {
   el.sfxToggle = $('#sfx-toggle');
   el.wireList = $('#wire-list');
   el.partnerCard = $('#partner-card');
+  el.oracleCard = $('#oracle-card');
+  el.oracleList = $('#oracle-list');
+  el.oracleSync = $('#oracle-sync');
   el.partnerList = $('#partner-list');
   el.wireSyncDate = $('#wire-sync-date');
 }
@@ -856,6 +895,7 @@ function init() {
   renderWireList();
   loadWire();
   loadPartners();
+  loadRealOracle();
   buildBoard();
   renderAll();
   renderTicker();
