@@ -47,7 +47,7 @@ Then visit `http://localhost:8080`.
 ## Design system & agent skill
 
 - **Impeccable** ([impeccable.style](https://impeccable.style)) is vendored at
-  `.claude/skills/impeccable` (engine binary gitignored; reinstall with
+  `.agents/skills/impeccable` (engine binary gitignored; reinstall with
   `npx impeccable install`). Project context lives in `PRODUCT.md`; the visual
   world is documented in `DESIGN.md`.
 - **Design tokens**: `tokens.json` (DTCG format) is the system of record →
