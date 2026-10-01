@@ -86,7 +86,7 @@ odds engine, **twice**: normal motion and `prefers-reduced-motion`.
 
 ```bash
 npm install
-npm test        # 74 checks; exit 0 = green in both motion modes
+npm test        # 80 checks; exit 0 = green in both motion modes
 ```
 
 `tests/smoke.test.mjs` is self-contained (strips CDN scripts, stubs `matchMedia`,

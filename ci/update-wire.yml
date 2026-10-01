@@ -41,12 +41,12 @@ jobs:
 
       - name: Commit if the wire changed
         run: |
-          if git diff --quiet -- wire.json real-markets.json; then
+          if git diff --quiet -- wire.json real-markets.json real-history.json; then
             echo "Feeds unchanged — nothing to commit"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add wire.json real-markets.json
+          git add wire.json real-markets.json real-history.json
           git commit -m "chore(feeds): sync wire + real oracle prices [skip ci]"
           git push
