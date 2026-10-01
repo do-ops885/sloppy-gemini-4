@@ -58,6 +58,26 @@ Then visit `http://localhost:8080`.
   (source + date, synced 2026-10-01 via Google News RSS) — clearly separated from
   the hallucinated hype.
 
+## 💸 Real-money affiliate integration (compliance-first)
+
+The fake-money game never changes — but the sidebar can carry a **REAL MARKETS (18+)**
+rail linking to licensed prediction platforms via `partners.json`:
+
+- **Geo fail-closed**: partner links render only when the visitor's country passes the
+  partner's `allowedCountries`/`blockedCountries` rule. Unknown country = rail hidden.
+- **Disclosure interstitial before every exit**: affiliate commission disclosure, age
+  requirement, and helplines (1-800-GAMBLER · BeGambleAware · GamStop). Links carry
+  `rel="nofollow sponsored noopener"`.
+- **Setup**: join each platform's referral program, read its terms, replace
+  `YOUR_*_REF` in `partners.json`, keep blocklists current. Test with `?geo=US`.
+- **Landscape**: Kalshi (CFTC-regulated, US) and Polymarket (crypto, NOT available to
+  US persons) are the natural fits for AI-release markets; Manifold is the no-license
+  lightweight option. **Offshore crypto casinos (Stake, Rollbit, …) are deliberately
+  excluded** — promoting unlicensed operators into restricted markets is illegal.
+- **Your obligations**: FTC/ASA affiliate disclosure (built in), age gating (built in),
+  platform terms review + local gambling-advertising law (on you — get legal advice
+  before spending on traffic).
+
 ## 🤖 Automation: the wire syncs itself
 
 The workflow ships staged at **`ci/update-wire.yml`** — the bot token lacks the

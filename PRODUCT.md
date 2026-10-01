@@ -29,7 +29,8 @@ the craft underneath is high.
 2. **No real money, ever** — copy must keep that obvious at every wager surface.
 3. **Motion harness is non-negotiable** — composited transforms/opacity only; springs (380/28 modals); 240ms/110ms asymmetric easings; FLIP reorders; full `prefers-reduced-motion` parity (150ms opacity fades).
 4. **Design tokens are the system of record** — `tokens.json` (DTCG) → `tokens.css` → Tailwind config. New values enter as tokens, not one-off literals.
-5. **Real news wire stays sourced + dated** — wire items must carry publication + date; never blend unlabeled real headlines into the hallucinated hype.
+5. **Real-money exits stay compliance-gated** — partner links render only where legal (geo fail-closed), always behind the disclosure interstitial (affiliate disclosure, age, helplines), always `rel="nofollow sponsored"`. Never integrate platforms unlicensed in the visitor's market (offshore crypto casinos are out).
+6. **Real news wire stays sourced + dated** — wire items must carry publication + date; never blend unlabeled real headlines into the hallucinated hype.
 
 ## Workflow defaults
 No image generation available → code-first path (not stored, per skill rules).

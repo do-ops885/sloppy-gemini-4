@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "geoEndpoint": "https://ipapi.co/json/",
+  "failClosed": true,
+  "_comment": "Replace YOUR_*_REF with real referral codes AFTER joining each program and reading its terms. Partners render ONLY when the visitor's country passes their rule; unknown country = hidden (fail closed). allowedCountries wins over blockedCountries.",
+  "partners": [
+    {
+      "id": "kalshi",
+      "name": "Kalshi",
+      "kind": "CFTC-regulated event contracts",
+      "url": "https://kalshi.com/?ref=YOUR_KALSHI_REF",
+      "marketSearch": "gemini",
+      "allowedCountries": ["US"],
+      "minAge": 18,
+      "note": "US-regulated prediction market. Real AI-release markets exist here."
+    },
+    {
+      "id": "polymarket",
+      "name": "Polymarket",
+      "kind": "USDC prediction market (crypto)",
+      "url": "https://polymarket.com/?ref=YOUR_POLYMARKET_REF",
+      "marketSearch": "gemini",
+      "blockedCountries": ["US", "GB", "FR", "SG", "AU", "CA-ON"],
+      "minAge": 18,
+      "note": "NOT available to US persons (CFTC order) and several other markets. Keep the blocklist current with their Terms of Use."
+    },
+    {
+      "id": "manifold",
+      "name": "Manifold",
+      "kind": "play-money + sweepstakes",
+      "url": "https://manifold.markets/?ref=YOUR_MANIFOLD_REF",
+      "marketSearch": "gemini",
+      "minAge": 13,
+      "note": "Lightweight option: same joke, no gambling license required for play money."
+    }
+  ]
+}
