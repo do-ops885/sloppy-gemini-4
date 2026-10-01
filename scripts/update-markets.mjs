@@ -3,9 +3,12 @@
    (Polymarket gamma public-search + Kalshi v2 open events) -> real-markets.json
    Zero dependencies — Node 18+. Displaying public prices is data, not a wager;
    every outbound link still exits via the disclosure interstitial. */
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 const OUT = 'real-markets.json';
+const HISTORY = 'real-history.json';
+const MAX_POINTS = 60; // ~15 days at 6h cadence
+const seriesKey = (i) => `${i.platform}::${i.title}`;
 const MAX_PER_PLATFORM = 5;
 const UA = { headers: { 'user-agent': 'vaporware-pool-oracle-bot' } };
 const items = [];
@@ -77,4 +80,25 @@ const out = {
 };
 if (!out.items.length) throw new Error('no real-market items parsed — refusing to blank real-markets.json');
 writeFileSync(OUT, JSON.stringify(out, null, 2) + '\n');
-console.log(`real-markets.json updated: ${out.items.length} items, synced ${out.synced}`);
+
+/* ---- append price history (sparkline fuel) ---- */
+let history = { synced: null, series: {} };
+try {
+  const prev = JSON.parse(readFileSync(HISTORY, 'utf8'));
+  if (prev && typeof prev === 'object' && prev.series && typeof prev.series === 'object') history = prev;
+} catch { /* first run or corrupt file -> start fresh */ }
+for (const item of out.items) {
+  const key = seriesKey(item);
+  const pts = Array.isArray(history.series[key]) ? history.series[key] : [];
+  const last = pts[pts.length - 1];
+  if (!last || last[1] !== item.yesPct) pts.push([out.synced, item.yesPct]);
+  history.series[key] = pts.slice(-MAX_POINTS);
+}
+// drop series whose market vanished from the latest sync
+const liveKeys = new Set(out.items.map(seriesKey));
+for (const key of Object.keys(history.series)) {
+  if (!liveKeys.has(key)) delete history.series[key];
+}
+history.synced = out.synced;
+writeFileSync(HISTORY, JSON.stringify(history, null, 2) + '\n');
+console.log(`real-markets.json updated: ${out.items.length} items; history: ${Object.keys(history.series).length} series, synced ${out.synced}`);

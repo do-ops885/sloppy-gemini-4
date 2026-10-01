@@ -98,10 +98,16 @@ async function suite(reduced) {
   window.__vaporware.renderRealOracle([
     { platform: 'Polymarket', title: 'Gemini 4.0 released by...? — October 31', yesPct: 88, volume: 73794, url: 'https://polymarket.com/event/x' },
     { platform: 'Kalshi', title: 'Will OpenAI or Anthropic IPO first?', yesPct: 41, volume: 9000, url: 'https://kalshi.com/markets/x' },
-  ], '2026-10-01T00:00:00Z');
+  ], '2026-10-01T00:00:00Z', {
+    'Polymarket::Gemini 4.0 released by...? — October 31': [['t1', 80], ['t2', 85], ['t3', 88]],
+    'Kalshi::Will OpenAI or Anthropic IPO first?': [['t1', 41]],
+  });
   await sleep(50);
   check('oracle rows rendered + card shown', !doc.getElementById('oracle-card').hidden && doc.querySelectorAll('.oracle-row').length === 2);
   check('oracle pct formatting', doc.querySelector('.oracle-pct').textContent.includes('88%'));
+  check('sparklines rendered in oracle rows', doc.querySelectorAll('.oracle-spark').length === 2);
+  check('sparkline polyline point count', (doc.querySelector('.oracle-spark polyline').getAttribute('points') || '').trim().split(' ').length === 3);
+  check('delusion spread computed', doc.getElementById('oracle-diverge').textContent.includes('DELUSION SPREAD') && doc.getElementById('oracle-diverge').textContent.includes('pp of pure copium'));
   doc.querySelector('.oracle-row').dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
   await sleep(50);
   check('oracle exit routes via disclosure', !doc.getElementById('disclosure-modal').hidden && doc.getElementById('disclosure-body').textContent.includes('Polymarket'));

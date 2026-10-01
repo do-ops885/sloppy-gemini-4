@@ -768,21 +768,43 @@ window.__vaporware = { openDisclosure, closeDisclosure, renderRealOracle }; // t
 /* ---------- 11c. REAL ORACLE (live public prices; data, not wagers) ---------- */
 async function loadRealOracle() {
   let data = null;
+  let history = null;
   try {
     const res = await fetch('real-markets.json', { cache: 'no-store' });
     if (res.ok) data = await res.json();
   } catch (e) { /* file:// or offline -> card stays hidden */ }
+  try {
+    const res2 = await fetch('real-history.json', { cache: 'no-store' });
+    if (res2.ok) history = await res2.json();
+  } catch (e) { /* history optional */ }
   if (!data || !Array.isArray(data.items) || !data.items.length) return;
-  renderRealOracle(data.items, data.synced);
+  renderRealOracle(data.items, data.synced, history && history.series);
 }
 
-function renderRealOracle(items, synced) {
+function sparklineSVG(pts, platform) {
+  if (!pts || !pts.length) return '';
+  const w = 64;
+  const h = 22;
+  const pad = 3;
+  const vals = pts.map((p) => p[1]);
+  const min = Math.min(...vals);
+  const range = Math.max(...vals) - min || 1;
+  const stepX = pts.length > 1 ? (w - pad * 2) / (pts.length - 1) : 0;
+  const coords = pts.map((p, i) => `${(pad + i * stepX).toFixed(1)},${(h - pad - ((p[1] - min) / range) * (h - pad * 2)).toFixed(1)}`);
+  const [lx, ly] = coords[coords.length - 1].split(',');
+  const line = pts.length > 1 ? `<polyline points="${coords.join(' ')}" fill="none" stroke-width="1.5" />` : '';
+  return `<svg class="oracle-spark ${platform.toLowerCase()}" viewBox="0 0 ${w} ${h}" aria-hidden="true">${line}<circle cx="${lx}" cy="${ly}" r="2.2" /></svg>`;
+}
+
+function renderRealOracle(items, synced, series) {
   el.oracleList.innerHTML = '';
   items.forEach((it) => {
+    const pts = series ? series[`${it.platform}::${it.title}`] : null;
     const li = document.createElement('li');
     li.innerHTML = `<button class="oracle-row">
       <span class="oracle-plat ${it.platform.toLowerCase()}">${it.platform.toUpperCase()}</span>
       <span class="oracle-title">${it.title}</span>
+      ${sparklineSVG(pts, it.platform)}
       <span class="oracle-pct">${it.yesPct}%</span>
       <span class="oracle-vol">VOL ${fmt$(it.volume || 0)}</span>
     </button>`;
@@ -797,7 +819,16 @@ function renderRealOracle(items, synced) {
   });
   el.oracleCard.hidden = false;
   if (synced) el.oracleSync.textContent = synced.slice(0, 10);
+  renderDivergence(items);
   icons();
+}
+
+function renderDivergence(items) {
+  const topVibes = Math.max(...MARKETS.map((m) => (shareOf(m) / totalShare()) * 100));
+  const topReal = Math.max(0, ...items.filter((i) => i.platform === 'Polymarket').map((i) => i.yesPct));
+  if (!topReal || !el.oracleDiverge) return;
+  const spread = (topReal - topVibes).toFixed(1);
+  el.oracleDiverge.innerHTML = `DELUSION SPREAD: vibes ${topVibes.toFixed(1)}% vs real ${topReal}% \u2192 ${spread}pp of pure copium <span>*not comparable, compared anyway</span>`;
 }
 
 /* ---------- 12. Wiring & init ---------- */
@@ -834,6 +865,7 @@ function grabEls() {
   el.oracleCard = $('#oracle-card');
   el.oracleList = $('#oracle-list');
   el.oracleSync = $('#oracle-sync');
+  el.oracleDiverge = $('#oracle-diverge');
   el.partnerList = $('#partner-list');
   el.wireSyncDate = $('#wire-sync-date');
 }
