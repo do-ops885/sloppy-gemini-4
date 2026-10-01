@@ -659,6 +659,111 @@ function confirmBet(e) {
   el.slipCount.classList.add('pop');
 }
 
+
+/* ---------- 11b. Real-market affiliate rail (compliance-first) ----------
+   Defaults: fail closed. No rail without a country, no exit without the
+   disclosure interstitial, every link rel="nofollow sponsored". */
+const PARTNERS_FALLBACK = { failClosed: true, partners: [] }; // file:// = nothing shown
+const GEO_ENDPOINT = 'https://ipapi.co/json/';
+
+async function loadPartners() {
+  buildDisclosureModal();
+  let cfg = PARTNERS_FALLBACK;
+  try {
+    const res = await fetch('partners.json', { cache: 'no-store' });
+    if (res.ok) cfg = await res.json();
+  } catch (e) { /* file:// or offline -> fallback (empty) */ }
+  if (!cfg.partners || !cfg.partners.length) return;
+  const country = await detectCountry(cfg);
+  renderPartnerRail(cfg.partners, country);
+}
+
+async function detectCountry(cfg) {
+  const override = new URLSearchParams(location.search).get('geo');
+  if (override) return override.toUpperCase(); // testing hook: ?geo=US
+  try {
+    const res = await fetch(cfg.geoEndpoint || GEO_ENDPOINT, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`geo HTTP ${res.status}`);
+    const data = await res.json();
+    return (data.country_code || data.country || '').toUpperCase() || null;
+  } catch (e) {
+    return null; // fail closed
+  }
+}
+
+function partnerAllowed(p, country) {
+  if (!country) return false;
+  if (Array.isArray(p.allowedCountries) && p.allowedCountries.length) return p.allowedCountries.includes(country);
+  if (Array.isArray(p.blockedCountries)) return !p.blockedCountries.includes(country);
+  return false;
+}
+
+function renderPartnerRail(partners, country) {
+  const allowed = partners.filter((p) => partnerAllowed(p, country));
+  el.partnerList.innerHTML = '';
+  if (!allowed.length) { el.partnerCard.hidden = true; return; }
+  allowed.forEach((p) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<button class="partner-row" data-partner="${p.id}">
+      <span class="partner-name">${p.name}</span>
+      <span class="partner-kind">${p.kind} · ${p.minAge || 18}+</span>
+      <span class="partner-cta">REAL ODDS <i data-lucide="external-link" class="h-3 w-3"></i></span>
+    </button>`;
+    li.querySelector('button').addEventListener('click', () => openDisclosure(p));
+    el.partnerList.appendChild(li);
+  });
+  el.partnerCard.hidden = false;
+  icons();
+}
+
+function buildDisclosureModal() {
+  if (el.disclosureModal) return;
+  const wrap = document.createElement('div');
+  wrap.id = 'disclosure-modal';
+  wrap.className = 'disclosure';
+  wrap.hidden = true;
+  wrap.innerHTML = `
+    <div class="disclosure-backdrop" data-disclose-cancel></div>
+    <div class="disclosure-panel" role="dialog" aria-modal="true" aria-labelledby="disclosure-title">
+      <h3 id="disclosure-title">REAL MONEY LEAVES THE ARCADE</h3>
+      <p id="disclosure-body"></p>
+      <ul class="disclosure-facts">
+        <li>This is an <b>affiliate link</b> — we may earn a commission.</li>
+        <li>Real platforms require ID verification. Real losses are possible.</li>
+        <li id="disclosure-age"></li>
+      </ul>
+      <p class="disclosure-help">HELP: 1-800-GAMBLER (US) · BeGambleAware.org (UK) · GamStop</p>
+      <div class="disclosure-actions">
+        <button class="cta-ghost" data-disclose-cancel>STAY IN THE ARCADE</button>
+        <a id="disclosure-go" class="cta-primary" href="#" rel="nofollow sponsored noopener" target="_blank">CONTINUE <i data-lucide="external-link" class="h-4 w-4"></i></a>
+      </div>
+    </div>`;
+  document.body.appendChild(wrap);
+  el.disclosureModal = wrap;
+  icons();
+  wrap.addEventListener('click', (e) => { if (e.target.closest('[data-disclose-cancel]')) closeDisclosure(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !wrap.hidden) closeDisclosure(); });
+}
+
+function openDisclosure(p) {
+  const m = el.disclosureModal;
+  if (!m) return;
+  m.querySelector('#disclosure-body').textContent = `${p.name} is a real-money platform (${p.kind}). The Vaporware Pool is fake; that is not.`;
+  m.querySelector('#disclosure-age').textContent = `${p.minAge || 18}+ only, in jurisdictions where ${p.name} is licensed. Check your local laws.`;
+  m.querySelector('#disclosure-go').href = p.url;
+  m.hidden = false;
+  requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('open')));
+  m.querySelector('[data-disclose-cancel]').focus();
+}
+
+function closeDisclosure() {
+  const m = el.disclosureModal;
+  if (!m || m.hidden) return;
+  m.classList.remove('open');
+  setTimeout(() => { m.hidden = true; }, REDUCED ? 160 : 250);
+}
+window.__vaporware = { openDisclosure, closeDisclosure }; // test hook
+
 /* ---------- 12. Wiring & init ---------- */
 function grabEls() {
   el.hypeTrack = $('#hype-track');
@@ -689,6 +794,8 @@ function grabEls() {
   el.slipCount = $('#slip-count');
   el.sfxToggle = $('#sfx-toggle');
   el.wireList = $('#wire-list');
+  el.partnerCard = $('#partner-card');
+  el.partnerList = $('#partner-list');
   el.wireSyncDate = $('#wire-sync-date');
 }
 
@@ -748,6 +855,7 @@ function init() {
   buildHypeMarquee();
   renderWireList();
   loadWire();
+  loadPartners();
   buildBoard();
   renderAll();
   renderTicker();
