@@ -78,6 +78,21 @@ rail linking to licensed prediction platforms via `partners.json`:
   platform terms review + local gambling-advertising law (on you — get legal advice
   before spending on traffic).
 
+## 🧪 Test harness
+
+The full interaction suite runs in jsdom — no browser needed — and covers the
+board, drawer flow, payout math, feed, wire, disclosure interstitial, and the
+odds engine, **twice**: normal motion and `prefers-reduced-motion`.
+
+```bash
+npm install
+npm test        # 66 checks; exit 0 = green in both motion modes
+```
+
+`tests/smoke.test.mjs` is self-contained (strips CDN scripts, stubs `matchMedia`,
+uses the `window.__vaporware` disclosure hook). `npm run wire` re-syncs the news
+snapshot locally.
+
 ## 🤖 Automation: the wire syncs itself
 
 The workflow ships staged at **`ci/update-wire.yml`** — the bot token lacks the
