@@ -232,3 +232,17 @@ input,textarea,[contenteditable]{caret-color:var(--accent-hyper)}
 @media (prefers-reduced-motion: reduce){
   .disclosure-panel{transform:none;transition:opacity 150ms linear}
 }
+
+/* ---------- real oracle (live public market prices) ---------- */
+.oracle-card{border-color:rgba(0,240,255,.35)}
+.oracle-card h3{color:var(--accent-hyper)}
+.oracle-row{display:grid;grid-template-columns:auto 1fr auto;gap:.1rem .6rem;align-items:center;width:100%;text-align:left;border:1px solid var(--border-subtle);border-radius:var(--radius-md);background:rgba(255,255,255,.03);padding:.55rem .7rem;transition:transform var(--motion-exit),border-color .15s}
+.oracle-row:hover{border-color:rgba(0,240,255,.55)}
+.oracle-row:active{transform:scale(.97)}
+.oracle-plat{grid-row:1/3;font-size:8px;font-weight:700;letter-spacing:.14em;padding:.22rem .4rem;border-radius:4px}
+.oracle-plat.polymarket{color:var(--accent-hyper);background:rgba(0,240,255,.1)}
+.oracle-plat.kalshi{color:var(--accent-panic);background:rgba(250,204,21,.1)}
+.oracle-title{font-size:10px;line-height:1.4;color:var(--text-primary)}
+.oracle-vol{font-size:8px;letter-spacing:.1em;color:var(--text-muted)}
+.oracle-pct{grid-row:1/3;font-family:var(--font-mono);font-weight:700;font-size:.95rem;color:var(--accent-toxic);font-variant-numeric:tabular-nums}
+.oracle-pct::after{content:' YES';font-size:7px;letter-spacing:.14em;color:var(--text-muted)}

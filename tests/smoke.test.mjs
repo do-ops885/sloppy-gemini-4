@@ -51,6 +51,7 @@ async function suite(reduced) {
   check('tokens.css linked', !!doc.querySelector('link[href="tokens.css"]'));
   check('partner rail fail-closed by default', doc.getElementById('partner-card').hidden === true);
   check('disclosure modal built', !!doc.getElementById('disclosure-modal'));
+  check('oracle card hidden by default (file:// fallback)', doc.getElementById('oracle-card').hidden === true);
   check('countdown ticking format', /^\d{2,}:\d{2}:\d{2}:\d{2}$/.test(doc.getElementById('countdown').textContent));
   check('book sum computed', /%$/.test(doc.getElementById('book-sum').textContent));
   check('favorite sorted first (summer-2027)', doc.querySelector('.card').dataset.id === 'summer-2027');
@@ -93,6 +94,17 @@ async function suite(reduced) {
   check('disclosure opens with partner copy', !doc.getElementById('disclosure-modal').hidden && doc.getElementById('disclosure-body').textContent.includes('TestMarket'));
   check('disclosure shows age gate', doc.getElementById('disclosure-age').textContent.includes('21+'));
   check('disclosure link is sponsored nofollow', (doc.getElementById('disclosure-go').getAttribute('rel') || '').includes('sponsored'));
+  // ---- real oracle render + exit-via-disclosure ----
+  window.__vaporware.renderRealOracle([
+    { platform: 'Polymarket', title: 'Gemini 4.0 released by...? — October 31', yesPct: 88, volume: 73794, url: 'https://polymarket.com/event/x' },
+    { platform: 'Kalshi', title: 'Will OpenAI or Anthropic IPO first?', yesPct: 41, volume: 9000, url: 'https://kalshi.com/markets/x' },
+  ], '2026-10-01T00:00:00Z');
+  await sleep(50);
+  check('oracle rows rendered + card shown', !doc.getElementById('oracle-card').hidden && doc.querySelectorAll('.oracle-row').length === 2);
+  check('oracle pct formatting', doc.querySelector('.oracle-pct').textContent.includes('88%'));
+  doc.querySelector('.oracle-row').dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
+  await sleep(50);
+  check('oracle exit routes via disclosure', !doc.getElementById('disclosure-modal').hidden && doc.getElementById('disclosure-body').textContent.includes('Polymarket'));
   window.__vaporware.closeDisclosure();
   await sleep(300);
   check('disclosure closes', doc.getElementById('disclosure-modal').hidden === true);
