@@ -1,0 +1,47 @@
+{
+  "synced": "2026-10-01T16:40:24.987Z",
+  "query": "\"Gemini 4 Pro\"",
+  "source_feed": "https://news.google.com/rss/search?q=%22Gemini%204%20Pro%22&hl=en-US&gl=US&ceid=US:en",
+  "items": [
+    {
+      "t": "Gemini 4 Argon: our next era of frontier intelligence",
+      "s": "blog.google",
+      "d": "Sep 30"
+    },
+    {
+      "t": "Gemini 4 is almost ready, says new Google DeepMind chief",
+      "s": "The Verge",
+      "d": "Sep 24"
+    },
+    {
+      "t": "Google tests new Gemini 4 Pro checkpoints, early outputs",
+      "s": "TestingCatalog AI News",
+      "d": "Sep 23"
+    },
+    {
+      "t": "Google Nears Release of Flagship Gemini 4 AI Model",
+      "s": "The Information",
+      "d": "Sep 23"
+    },
+    {
+      "t": "Google says Gemini 4 release is coming ‘as soon as possible’",
+      "s": "9to5Google",
+      "d": "Sep 24"
+    },
+    {
+      "t": "Google Confirms Gemini 4 Replaces Gemini 3.5 Pro Entirely",
+      "s": "Geeky Gadgets",
+      "d": "Sep 27"
+    },
+    {
+      "t": "Google Unveils Gemini 4 Argon, Surpassing OpenAI and Anthropic",
+      "s": "조선일보",
+      "d": "Oct 1"
+    },
+    {
+      "t": "Gemini 4: Leaks, Release Date and Why Google Must Catch Up",
+      "s": "trendingtopics.eu",
+      "d": "Sep 26"
+    }
+  ]
+}

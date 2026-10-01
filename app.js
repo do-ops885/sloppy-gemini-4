@@ -224,7 +224,7 @@ function updateBookSum() {
 }
 
 /* ---------- 3. Marquees & live ticker ---------- */
-const WIRE_SYNC = '2026-10-01';
+let WIRE_SYNC = '2026-10-01'; // fallback snapshot — wire.json overrides when served over http(s)
 const WIRE = [
   { t: 'Gemini 4 Argon: our next era of frontier intelligence', s: 'blog.google', d: 'Sep 30' },
   { t: 'Google says Gemini 4 release is coming \u201Cas soon as possible\u201D', s: '9to5Google', d: 'Sep 24' },
@@ -254,6 +254,22 @@ function buildHypeMarquee() {
   const hype = HYPE.map((q) => `<span>${q}</span><span class="sep">//</span>`).join('');
   const group = wire + hype;
   el.hypeTrack.innerHTML = `<div class="marquee-group">${group}</div><div class="marquee-group" aria-hidden="true">${group}</div>`;
+}
+
+async function loadWire() {
+  try {
+    const res = await fetch('wire.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (!data || !Array.isArray(data.items) || !data.items.length) throw new Error('bad wire.json');
+    WIRE.length = 0;
+    data.items.forEach((w) => WIRE.push(w));
+    if (typeof data.synced === 'string' && data.synced.length >= 10) WIRE_SYNC = data.synced.slice(0, 10);
+  } catch (e) {
+    return; // file:// or offline: embedded snapshot stays
+  }
+  buildHypeMarquee();
+  renderWireList();
 }
 
 function renderWireList() {
@@ -731,6 +747,7 @@ function init() {
   grabEls();
   buildHypeMarquee();
   renderWireList();
+  loadWire();
   buildBoard();
   renderAll();
   renderTicker();

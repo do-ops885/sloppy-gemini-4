@@ -58,6 +58,25 @@ Then visit `http://localhost:8080`.
   (source + date, synced 2026-10-01 via Google News RSS) — clearly separated from
   the hallucinated hype.
 
+## 🤖 Automation: the wire syncs itself
+
+The workflow ships staged at **`ci/update-wire.yml`** — the bot token lacks the
+`workflows` permission, so a human installs it once:
+
+```bash
+mkdir -p .github/workflows && cp ci/update-wire.yml .github/workflows/
+git add .github && git commit -m "ci: enable wire sync" && git push
+# or via web UI: Actions -> New workflow -> paste ci/update-wire.yml
+```
+
+Once enabled it runs every 6 hours (and on demand via
+**Actions → Update REAL WIRE → Run workflow**). It fetches the latest
+`"Gemini 4 Pro"` headlines from Google News RSS via `scripts/update-wire.mjs`
+(zero-dep Node), rewrites `wire.json`, and commits it back to `main` — which
+also retriggers the Pages deploy. The app fetches `wire.json` at runtime when
+served over HTTP(S) and falls back to the embedded snapshot on `file://`.
+Everything except the one-copy install is already live.
+
 ## Features
 
 - **Dual-direction infinite marquees** — hype quotes one way, live odds ticker the other
