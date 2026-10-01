@@ -1,0 +1,14 @@
+{
+  "name": "vaporware-pool",
+  "private": true,
+  "version": "1.0.0",
+  "description": "GEMINI 4 PRO: The Final Countdown & Vaporware Pool — parody prediction terminal",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/smoke.test.mjs",
+    "wire": "node scripts/update-wire.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.1"
+  }
+}

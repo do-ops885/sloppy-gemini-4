@@ -1,2 +1,3 @@
 .claude/settings.local.json
 .claude/skills/impeccable/scripts/bin/
+node_modules/
