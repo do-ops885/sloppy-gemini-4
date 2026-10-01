@@ -1,0 +1,48 @@
+name: Update REAL WIRE
+
+# INSTALL: copy this file to .github/workflows/update-wire.yml
+# (the bot token cannot push into .github/workflows — needs a human or an app
+# with the workflows permission; via web UI: Actions -> New workflow -> paste).
+#
+# Keeps the parody terminal's REAL WIRE section fed with actual, labeled
+# Gemini 4 Pro headlines. Runs every 6 hours + on demand; commits wire.json
+# back to main, which also retriggers the GitHub Pages deploy.
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'   # every 6h at :17 — avoids the top-of-hour rush
+  workflow_dispatch:          # manual: Actions -> Update REAL WIRE -> Run workflow
+
+permissions:
+  contents: write             # needed to push the wire.json commit
+
+concurrency:
+  group: wire-update
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch latest Gemini 4 Pro news -> wire.json
+        run: node scripts/update-wire.mjs
+
+      - name: Commit if the wire changed
+        run: |
+          if git diff --quiet -- wire.json; then
+            echo "Wire unchanged — nothing to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add wire.json
+          git commit -m "chore(wire): sync latest Gemini 4 Pro news [skip ci]"
+          git push
