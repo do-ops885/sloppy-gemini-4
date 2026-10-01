@@ -1,0 +1,57 @@
+/* ============================================================
+   DESIGN TOKENS — GEMINI 4 PRO VAPORWARE POOL
+   System of record: tokens.json (DTCG format). This file is the
+   consumable CSS layer: primitives -> semantics -> legacy aliases.
+   Extracted per the Impeccable `extract` flow.
+   ============================================================ */
+:root{
+  /* ---- primitives: color ---- */
+  --void-950:#07080d; --void-900:#0d1017; --void-800:#141826; --void-700:#1c2133;
+  --ink-100:#f8fafc; --ink-200:#e2e8f0; --ink-300:#cbd5e1; --ink-400:#94a3b8; --ink-500:#64748b; --ink-600:#475569;
+  --cyan-400:#00f0ff; --green-500:#10b981; --magenta-500:#ff007f; --gold-400:#facc15;
+
+  /* ---- primitives: typography ---- */
+  --font-display:'Syne',ui-sans-serif,system-ui,sans-serif;
+  --font-mono:'Space Mono',ui-monospace,SFMono-Regular,monospace;
+  --font-poster:'Archivo Black','Syne',ui-sans-serif,sans-serif;
+  --text-micro:0.5625rem; --text-caption:0.625rem; --text-xs:0.75rem; --text-sm:0.875rem;
+  --text-base:1rem; --text-lg:1.125rem; --text-xl:1.25rem; --text-2xl:1.5rem;
+  --text-3xl:1.875rem; --text-4xl:2.25rem; --text-display:clamp(2.5rem,7.2vw,6.2rem);
+  --tracking-wide:0.08em; --tracking-wider:0.16em; --tracking-widest:0.24em;
+
+  /* ---- primitives: space / radius ---- */
+  --space-1:0.25rem; --space-2:0.5rem; --space-3:0.75rem; --space-4:1rem;
+  --space-5:1.25rem; --space-6:1.5rem; --space-8:2rem; --space-10:2.5rem; --space-12:3rem;
+  --radius-sm:6px; --radius-md:10px; --radius-lg:14px; --radius-xl:16px; --radius-full:9999px;
+
+  /* ---- primitives: motion ---- */
+  --duration-enter:240ms; --duration-exit:110ms; --duration-fade:150ms;
+  --ease-out:cubic-bezier(0.16,1,0.3,1); --ease-in:cubic-bezier(0.7,0,0.84,0);
+  --motion-enter:var(--duration-enter) var(--ease-out);
+  --motion-exit:var(--duration-exit) var(--ease-in);
+  /* spring presets live JS-side (stiffness/damping/mass): see tokens.json motion.spring */
+
+  /* ---- primitives: elevation / z ---- */
+  --z-base:0; --z-marquee:20; --z-header:40; --z-overlay:55; --z-drawer:60; --z-toast:80; --z-confetti:90;
+  --shadow-card:0 18px 50px rgba(0,0,0,.55);
+  --shadow-panel:0 20px 60px rgba(0,0,0,.5);
+  --shadow-toast:0 10px 40px rgba(16,185,129,.18);
+
+  /* ---- primitives: glows (decorative halos; depth comes from shadows above) ---- */
+  --glow-hyper:0 0 18px rgba(0,240,255,.45);
+  --glow-toxic:0 0 20px rgba(16,185,129,.5);
+  --glow-halluc:0 0 30px rgba(255,0,127,.3);
+  --glow-panic:0 0 16px rgba(250,204,21,.45);
+
+  /* ---- semantic tokens ---- */
+  --surface-base:var(--void-950); --surface-raised:var(--void-900); --surface-card:var(--void-800);
+  --text-primary:var(--ink-200); --text-heading:var(--ink-100); --text-secondary:var(--ink-400); --text-muted:var(--ink-500);
+  --accent-hyper:var(--cyan-400); --accent-toxic:var(--green-500); --accent-halluc:var(--magenta-500); --accent-panic:var(--gold-400);
+  --border-subtle:rgba(255,255,255,.09); --border-strong:rgba(255,255,255,.15);
+  --focus-ring:var(--accent-hyper);
+
+  /* ---- legacy aliases (deprecated; retained for back-compat) ---- */
+  --void:var(--surface-base); --hyper:var(--accent-hyper); --toxic:var(--accent-toxic);
+  --halluc:var(--accent-halluc); --panic:var(--accent-panic);
+  --enter:var(--motion-enter); --exit:var(--motion-exit);
+}

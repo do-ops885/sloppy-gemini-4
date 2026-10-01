@@ -44,6 +44,20 @@ Then visit `http://localhost:8080`.
 - Google Fonts: **Archivo Black** (poster), **Syne** (display), **Space Mono** (stats)
 - Vanilla JS physics/motion engine — zero dependencies, zero layout thrash
 
+## Design system & agent skill
+
+- **Impeccable** ([impeccable.style](https://impeccable.style)) is vendored at
+  `.claude/skills/impeccable` (engine binary gitignored; reinstall with
+  `npx impeccable install`). Project context lives in `PRODUCT.md`; the visual
+  world is documented in `DESIGN.md`.
+- **Design tokens**: `tokens.json` (DTCG format) is the system of record →
+  `tokens.css` (CSS custom properties: primitives → semantics) → mirrored into the
+  Tailwind CDN config as `var(--*)` references. New values enter as tokens, never
+  one-off literals.
+- **REAL WIRE**: the top marquee and sidebar carry *real, labeled* Gemini 4 news
+  (source + date, synced 2026-10-01 via Google News RSS) — clearly separated from
+  the hallucinated hype.
+
 ## Features
 
 - **Dual-direction infinite marquees** — hype quotes one way, live odds ticker the other

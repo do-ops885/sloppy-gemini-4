@@ -224,7 +224,20 @@ function updateBookSum() {
 }
 
 /* ---------- 3. Marquees & live ticker ---------- */
+const WIRE_SYNC = '2026-10-01';
+const WIRE = [
+  { t: 'Gemini 4 Argon: our next era of frontier intelligence', s: 'blog.google', d: 'Sep 30' },
+  { t: 'Google says Gemini 4 release is coming \u201Cas soon as possible\u201D', s: '9to5Google', d: 'Sep 24' },
+  { t: 'Gemini 4 is almost ready, says new Google DeepMind chief', s: 'The Verge', d: 'Sep 24' },
+  { t: 'Google Nears Release of Flagship Gemini 4 AI Model', s: 'The Information', d: 'Sep 23' },
+  { t: 'Google tests new Gemini 4 Pro checkpoints, early outputs', s: 'TestingCatalog', d: 'Sep 23' },
+  { t: 'Gemini 4 Pro Leaks: Wild Benchmark Scores and Low Pricing Disrupt AI Race', s: 'nokiapoweruser', d: 'Sep 28' },
+  { t: 'Alphabet shares up in premarket trade after Gemini 4 Argon launch', s: 'StreetInsider', d: 'Oct 1' },
+];
+
 const HYPE = [
+  'GEMINI 4 ARGON LAUNCHED OCT 1 \u2014 STILL NO 4 PRO. DEGENERATES VINDICATED',
+  'DEEPMIND CHIEF: "AS SOON AS POSSIBLE" \u2014 ORACLE TRANSLATION: 2027',
   'ANON PUTS $50,000 ON "SUNDAR CANCELS IT"',
   'GEMINI 4 PRO BENCHMARKS LEAKED: SCORES 102% ON GSM8K BY INVENTING NEW MATH',
   'SAM ALTMAN SEEN SWEATING IN MOUNTAIN VIEW',
@@ -237,8 +250,17 @@ const HYPE = [
 ];
 
 function buildHypeMarquee() {
-  const group = HYPE.map((q) => `<span>${q}</span><span class="sep">//</span>`).join('');
+  const wire = WIRE.map((w) => `<span class="wire-item"><b>WIRE</b> ${w.t} <i>${w.s} · ${w.d}</i></span><span class="sep">//</span>`).join('');
+  const hype = HYPE.map((q) => `<span>${q}</span><span class="sep">//</span>`).join('');
+  const group = wire + hype;
   el.hypeTrack.innerHTML = `<div class="marquee-group">${group}</div><div class="marquee-group" aria-hidden="true">${group}</div>`;
+}
+
+function renderWireList() {
+  el.wireList.innerHTML = WIRE.slice(0, 5).map((w) =>
+    `<li class="wire-row"><span class="wire-meta">${w.s} · ${w.d}</span><span class="wire-title">${w.t}</span></li>`
+  ).join('');
+  el.wireSyncDate.textContent = WIRE_SYNC;
 }
 
 function renderTicker() {
@@ -349,7 +371,7 @@ function pushFeed(html, kind = 'bet') {
   li.innerHTML = `<i data-lucide="${FEED_ICONS[kind]}" class="mt-0.5 h-4 w-4 shrink-0 ${FEED_COLORS[kind]}"></i>
     <div class="min-w-0">
       <div class="leading-snug">${html}</div>
-      <div class="mt-0.5 text-[9px] tracking-[0.18em] text-slate-600">${new Date().toLocaleTimeString('en-GB')} · TX-${Math.random().toString(16).slice(2, 8).toUpperCase()}</div>
+      <div class="mt-0.5 text-[9px] tracking-[0.18em] text-slate-500">${new Date().toLocaleTimeString('en-GB')} · TX-${Math.random().toString(16).slice(2, 8).toUpperCase()}</div>
     </div>`;
   el.feed.prepend(li);
   icons();
@@ -650,6 +672,8 @@ function grabEls() {
   el.toastRoot = $('#toast-root');
   el.slipCount = $('#slip-count');
   el.sfxToggle = $('#sfx-toggle');
+  el.wireList = $('#wire-list');
+  el.wireSyncDate = $('#wire-sync-date');
 }
 
 function wireEvents() {
@@ -706,6 +730,7 @@ function init() {
   document.body.classList.toggle('reduced', REDUCED);
   grabEls();
   buildHypeMarquee();
+  renderWireList();
   buildBoard();
   renderAll();
   renderTicker();
