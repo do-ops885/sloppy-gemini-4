@@ -5,6 +5,22 @@ speculating on the release date of **Google Gemini 4 Pro** — or whether it dis
 into vaporware forever. All probabilities are hallucinated. All money is fake.
 The hopium is real.
 
+## 🌐 Live on GitHub Pages
+
+The site is 100% static at the repo root — Pages can serve it as-is, no build step,
+no workflow.
+
+**One-time enable (needs repo admin, ~10 seconds):**
+
+1. Open **[Settings → Pages](https://github.com/do-ops885/sloppy-gemini-4/settings/pages)**
+2. **Build and deployment → Source:** `Deploy from a branch`
+3. **Branch:** `main` · folder `/(root)` → **Save**
+4. Wait ~1 minute → live at **https://do-ops885.github.io/sloppy-gemini-4/**
+
+Every push to `main` redeploys automatically. (Pages can't be enabled from the API
+with the current CI token — it lacks the `pages:write` grant — hence the one manual
+click.)
+
 ## Run it
 
 No build step. It's a static single-page app:
