@@ -1,40 +1,78 @@
 {
-  "synced": "2026-10-01T17:52:42.654Z",
+  "synced": "2026-10-02T08:34:26.000Z",
   "items": [
     {
       "platform": "Polymarket",
       "title": "Gemini 4.0 released by...? — October 31",
-      "yesPct": 89.5,
-      "volume": 74410,
+      "yesPct": 83.5,
+      "volume": 82817,
       "url": "https://polymarket.com/event/gemini-4pt0-released-by-june-30-2026"
     },
     {
       "platform": "Polymarket",
       "title": "Gemini 4.0 released by...? — November 30",
-      "yesPct": 97.5,
-      "volume": 15843,
+      "yesPct": 98.4,
+      "volume": 16468,
       "url": "https://polymarket.com/event/gemini-4pt0-released-by-june-30-2026"
     },
     {
       "platform": "Polymarket",
       "title": "Gemini 4.0 released by...? — October 15",
-      "yesPct": 61,
-      "volume": 12004,
+      "yesPct": 46.5,
+      "volume": 15628,
       "url": "https://polymarket.com/event/gemini-4pt0-released-by-june-30-2026"
     },
     {
       "platform": "Polymarket",
       "title": "Gemini 4.0 released by...? — October 5",
-      "yesPct": 25.5,
-      "volume": 456,
+      "yesPct": 2.7,
+      "volume": 1073,
       "url": "https://polymarket.com/event/gemini-4pt0-released-by-june-30-2026"
     },
     {
       "platform": "Polymarket",
       "title": "Gemini 4.0 released by...? — October 10",
-      "yesPct": 51,
-      "volume": 21,
+      "yesPct": 38.5,
+      "volume": 60,
       "url": "https://polymarket.com/event/gemini-4pt0-released-by-june-30-2026"
+    }
+  ],
+  "settled": [
+    {
+      "platform": "Polymarket",
+      "title": "Gemini 4.0 released by...? — July 31",
+      "resolvedYes": false,
+      "url": "https://polymarket.com/event/gemini-4pt0-released-by-june-30-2026"
+    },
+    {
+      "platform": "Polymarket",
+      "title": "Gemini 4.0 released by...? — August 31",
+      "resolvedYes": false,
+      "url": "https://polymarket.com/event/gemini-4pt0-released-by-june-30-2026"
+    },
+    {
+      "platform": "Polymarket",
+      "title": "Gemini 4.0 released by...? — September 30",
+      "resolvedYes": false,
+      "url": "https://polymarket.com/event/gemini-4pt0-released-by-june-30-2026"
+    },
+    {
+      "platform": "Polymarket",
+      "title": "Gemini 4.0 released by...? — September 15",
+      "resolvedYes": false,
+      "url": "https://polymarket.com/event/gemini-4pt0-released-by-june-30-2026"
+    },
+    {
+      "platform": "Polymarket",
+      "title": "Gemini 4.0 released by...? — June 30",
+      "resolvedYes": false,
+      "url": "https://polymarket.com/event/gemini-4pt0-released-by-june-30-2026"
+    },
+    {
+      "platform": "Polymarket",
+      "title": "When will the next Google Gemini Pro model be released? — Prior to August 31",
+      "resolvedYes": false,
+      "url": "https://polymarket.com/event/when-will-the-next-google-gemini-pro-model-be-released-20260817144359068"
     }
   ]
 }

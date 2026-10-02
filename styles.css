@@ -256,3 +256,32 @@ input,textarea,[contenteditable]{caret-color:var(--accent-hyper)}
 .oracle-spark.kalshi{color:var(--accent-panic)}
 .oracle-diverge{margin-top:.8rem;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--accent-panic)}
 .oracle-diverge span{display:block;margin-top:.15rem;font-weight:400;font-size:8px;letter-spacing:.1em;color:var(--text-muted)}
+
+/* ---------- arbitrage board (hallucinated vs reality) ---------- */
+.arb-row{display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:center;border:1px solid var(--border-subtle);border-radius:var(--radius-lg);background:linear-gradient(165deg,rgba(20,24,38,.9),rgba(10,12,20,.92));padding:.9rem 1.1rem}
+.arb-rank{font-family:var(--font-poster);font-size:1.1rem;color:var(--text-muted);width:2.4rem}
+.arb-row:first-child .arb-rank{color:var(--accent-panic)}
+.arb-title{font-family:var(--font-display);font-weight:800;font-size:.85rem;color:var(--text-heading);letter-spacing:.01em}
+.arb-bars{margin-top:.5rem;display:flex;flex-direction:column;gap:.3rem}
+.arb-bar{display:flex;align-items:center;gap:.6rem}
+.arb-bar .track{position:relative;flex:1;height:7px;border-radius:var(--radius-full);background:rgba(255,255,255,.06);overflow:hidden}
+.arb-bar .track i{position:absolute;inset:0;transform-origin:left center;transform:scaleX(var(--p,0));transition:transform var(--motion-enter);border-radius:inherit;display:block}
+.arb-bar.vibes .track i{background:linear-gradient(90deg,var(--accent-hyper),var(--accent-halluc))}
+.arb-bar.real .track i{background:linear-gradient(90deg,var(--accent-toxic),var(--accent-panic))}
+.arb-bar b{width:7.5rem;flex:none;font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;color:var(--text-muted);font-variant-numeric:tabular-nums}
+.arb-bar.real b{color:var(--accent-toxic)}
+.arb-spread{font-family:var(--font-mono);font-weight:700;font-size:.9rem;text-align:right;font-variant-numeric:tabular-nums}
+.arb-spread small{display:block;font-size:8px;font-weight:400;letter-spacing:.14em;color:var(--text-muted)}
+.arb-spread.under{color:var(--accent-toxic)}
+.arb-spread.over{color:var(--accent-halluc)}
+.arb-spread.void{color:var(--text-muted)}
+@media (max-width:640px){.arb-row{grid-template-columns:1fr;gap:.5rem}.arb-rank{width:auto}.arb-spread{text-align:left}}
+
+/* ---------- rekt hall of fame ---------- */
+.hof-card{border-color:rgba(255,0,127,.3)}
+.hof-card h3{color:var(--accent-halluc)}
+.hof-row{display:flex;align-items:center;gap:.55rem;font-size:10px;line-height:1.4;color:var(--text-secondary)}
+.hof-row svg{flex:none;width:14px;height:14px;color:var(--text-muted)}
+.hof-badge{margin-left:auto;flex:none;font-size:8px;font-weight:700;letter-spacing:.14em;padding:.18rem .4rem;border-radius:4px}
+.hof-badge.no{color:var(--accent-halluc);background:rgba(255,0,127,.12)}
+.hof-badge.yes{color:var(--accent-toxic);background:rgba(16,185,129,.12)}

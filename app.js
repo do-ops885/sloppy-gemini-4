@@ -762,7 +762,7 @@ function closeDisclosure() {
   m.classList.remove('open');
   setTimeout(() => { m.hidden = true; }, REDUCED ? 160 : 250);
 }
-window.__vaporware = { openDisclosure, closeDisclosure, renderRealOracle }; // test hook
+window.__vaporware = { openDisclosure, closeDisclosure, renderRealOracle, renderArbitrage, renderSettled }; // test hook
 
 
 /* ---------- 11c. REAL ORACLE (live public prices; data, not wagers) ---------- */
@@ -779,6 +779,8 @@ async function loadRealOracle() {
   } catch (e) { /* history optional */ }
   if (!data || !Array.isArray(data.items) || !data.items.length) return;
   renderRealOracle(data.items, data.synced, history && history.series);
+  renderSettled(data.settled || []);
+  renderArbitrage(data.items);
 }
 
 function sparklineSVG(pts, platform) {
@@ -831,6 +833,65 @@ function renderDivergence(items) {
   el.oracleDiverge.innerHTML = `DELUSION SPREAD: vibes ${topVibes.toFixed(1)}% vs real ${topReal}% \u2192 ${spread}pp of pure copium <span>*not comparable, compared anyway</span>`;
 }
 
+
+/* ---------- 11d. ARBITRAGE BOARD + REKT HALL OF FAME ----------
+   Every parody market scored against the real Polymarket release curve.
+   Methodology: voodoo. Anchors are explicit and labeled. */
+const REAL_ANCHORS = {
+  'sneak-2026': { bracket: 'November 30', adjust: (p) => p, note: 'Q4 ≈ Nov bracket' },
+  'summer-2027': { bracket: 'November 30', adjust: (p) => Math.min(99.9, p + 1.5), note: 'curve +6mo extrapolation' },
+  'delay-2028': { bracket: 'November 30', adjust: (p) => (100 - p) / 2, note: 'half the complement' },
+  'never': { bracket: 'November 30', adjust: (p) => (100 - p) / 2, note: 'half the complement' },
+  'agi-swarm': { bracket: null, adjust: () => null, note: 'unrateable by design' },
+};
+
+function anchorFor(m, items) {
+  const cfg = REAL_ANCHORS[m.id];
+  if (!cfg || !cfg.bracket) return null;
+  const hit = items.find((i) => i.platform === 'Polymarket' && i.title.includes(cfg.bracket));
+  if (!hit) return null;
+  return Math.round(cfg.adjust(hit.yesPct) * 10) / 10;
+}
+
+function renderArbitrage(items) {
+  const rows = MARKETS.map((m) => {
+    const vibes = (shareOf(m) / totalShare()) * 100;
+    const real = anchorFor(m, items);
+    const spread = real == null ? null : Math.round((real - vibes) * 10) / 10;
+    return { m, vibes, real, spread };
+  }).sort((a, b) => (b.spread == null ? -1 : Math.abs(b.spread)) - (a.spread == null ? -1 : Math.abs(a.spread)));
+  el.arbBoard.innerHTML = rows.map((r, i) => {
+    const unrateable = r.spread == null;
+    const cls = unrateable ? 'void' : (r.spread >= 0 ? 'under' : 'over');
+    const verdict = unrateable ? 'BEYOND MEASUREMENT' : (Math.abs(r.spread) < 15 ? 'EFFICIENT(ISH)' : (r.spread >= 0 ? 'UNDERPRICED COPIUM' : 'OVERPRICED COPIUM'));
+    const spreadTxt = unrateable ? '∞' : `${r.spread >= 0 ? '+' : ''}${r.spread}pp`;
+    return `<div class="arb-row">
+      <span class="arb-rank">#${i + 1}</span>
+      <div class="arb-main">
+        <div class="arb-title">${r.m.short}</div>
+        <div class="arb-bars">
+          <div class="arb-bar vibes"><div class="track"><i style="--p:${(r.vibes / 100).toFixed(3)}"></i></div><b>VIBES ${r.vibes.toFixed(1)}%</b></div>
+          <div class="arb-bar real"><div class="track"><i style="--p:${((r.real ?? 0) / 100).toFixed(3)}"></i></div><b>${unrateable ? 'REAL UNRATEABLE' : `REAL ~${r.real}%`}</b></div>
+        </div>
+      </div>
+      <span class="arb-spread ${cls}">${spreadTxt}<small>${verdict}</small></span>
+    </div>`;
+  }).join('');
+  el.arbSection.hidden = false;
+}
+
+function renderSettled(settled) {
+  if (!settled || !settled.length) return;
+  el.hofList.innerHTML = settled.map((s) => `
+    <li class="hof-row">
+      <i data-lucide="skull"></i>
+      <span>${s.title}</span>
+      <span class="hof-badge ${s.resolvedYes ? 'yes' : 'no'}">RESOLVED ${s.resolvedYes ? 'YES' : 'NO'}</span>
+    </li>`).join('');
+  el.hofCard.hidden = false;
+  icons();
+}
+
 /* ---------- 12. Wiring & init ---------- */
 function grabEls() {
   el.hypeTrack = $('#hype-track');
@@ -866,6 +927,10 @@ function grabEls() {
   el.oracleList = $('#oracle-list');
   el.oracleSync = $('#oracle-sync');
   el.oracleDiverge = $('#oracle-diverge');
+  el.arbSection = $('#arbitrage');
+  el.arbBoard = $('#arb-board');
+  el.hofCard = $('#hof-card');
+  el.hofList = $('#hof-list');
   el.partnerList = $('#partner-list');
   el.wireSyncDate = $('#wire-sync-date');
 }
