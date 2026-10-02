@@ -273,7 +273,7 @@ async function loadWire() {
 }
 
 function renderWireList() {
-  el.wireList.innerHTML = WIRE.slice(0, 5).map((w) =>
+  el.wireList.innerHTML = WIRE.map((w) =>
     `<li class="wire-row"><span class="wire-meta">${w.s} · ${w.d}</span><span class="wire-title">${w.t}</span></li>`
   ).join('');
   el.wireSyncDate.textContent = WIRE_SYNC;

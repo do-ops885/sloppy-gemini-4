@@ -108,11 +108,10 @@ Once enabled it runs every 6 hours (and on demand via
 **Actions → Update REAL WIRE → Run workflow**). It fetches the latest
 `"Gemini 4 Pro"` headlines from Google News RSS via `scripts/update-wire.mjs`,
 plus **real prediction-market prices** (Polymarket gamma + Kalshi v2) via
-`scripts/update-markets.mjs`, and a **swing detector** (`scripts/alert-swings.mjs`)
-that diffs the latest two history points per market → `swings.json` (drives in-app
-swing badges) and posts a **Discord alert** for moves ≥ 10pp — the moment you add a
-`DISCORD_WEBHOOK_URL` repo secret (silent skip until then; Telegram = same pattern,
-`TELEGRAM_BOT_TOKEN` + `chat_id`). It commits `wire.json` +
+`scripts/update-markets.mjs`, and a **swing detector** (`scripts/update-swings.mjs`)
+that diffs the latest two history points per market → `swings.json` (drives the
+on-site swing badges). **Everything stays on the website** — no webhooks, no
+external notifications. It commits `wire.json` +
 `real-markets.json` + `real-history.json` + `swings.json` back to `main` — which also retriggers the Pages deploy.
 The app fetches both at runtime over HTTP(S) with hidden-card fallbacks on
 `file://`. Everything except the one-copy install is already live.

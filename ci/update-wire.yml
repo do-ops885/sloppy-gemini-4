@@ -39,10 +39,8 @@ jobs:
       - name: Fetch real prediction-market prices -> real-markets.json
         run: node scripts/update-markets.mjs
 
-      - name: Detect swings -> swings.json (+ optional Discord alert)
-        env:
-          ALERT_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: node scripts/alert-swings.mjs
+      - name: Detect swings -> swings.json (on-site badges only)
+        run: node scripts/update-swings.mjs
 
       - name: Commit if the wire changed
         run: |
