@@ -86,7 +86,7 @@ odds engine, **twice**: normal motion and `prefers-reduced-motion`.
 
 ```bash
 npm install
-npm test        # 94 checks; exit 0 = green in both motion modes
+npm test        # 98 checks; exit 0 = green in both motion modes
 ```
 
 `tests/smoke.test.mjs` is self-contained (strips CDN scripts, stubs `matchMedia`,
@@ -108,8 +108,12 @@ Once enabled it runs every 6 hours (and on demand via
 **Actions → Update REAL WIRE → Run workflow**). It fetches the latest
 `"Gemini 4 Pro"` headlines from Google News RSS via `scripts/update-wire.mjs`,
 plus **real prediction-market prices** (Polymarket gamma + Kalshi v2) via
-`scripts/update-markets.mjs` — both zero-dep Node. It commits `wire.json` +
-`real-markets.json` back to `main` — which also retriggers the Pages deploy.
+`scripts/update-markets.mjs`, and a **swing detector** (`scripts/alert-swings.mjs`)
+that diffs the latest two history points per market → `swings.json` (drives in-app
+swing badges) and posts a **Discord alert** for moves ≥ 10pp — the moment you add a
+`DISCORD_WEBHOOK_URL` repo secret (silent skip until then; Telegram = same pattern,
+`TELEGRAM_BOT_TOKEN` + `chat_id`). It commits `wire.json` +
+`real-markets.json` + `real-history.json` + `swings.json` back to `main` — which also retriggers the Pages deploy.
 The app fetches both at runtime over HTTP(S) with hidden-card fallbacks on
 `file://`. Everything except the one-copy install is already live.
 

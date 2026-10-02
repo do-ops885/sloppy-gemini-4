@@ -39,14 +39,19 @@ jobs:
       - name: Fetch real prediction-market prices -> real-markets.json
         run: node scripts/update-markets.mjs
 
+      - name: Detect swings -> swings.json (+ optional Discord alert)
+        env:
+          ALERT_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: node scripts/alert-swings.mjs
+
       - name: Commit if the wire changed
         run: |
-          if git diff --quiet -- wire.json real-markets.json real-history.json; then
+          if git diff --quiet -- wire.json real-markets.json real-history.json swings.json; then
             echo "Feeds unchanged — nothing to commit"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add wire.json real-markets.json real-history.json
+          git add wire.json real-markets.json real-history.json swings.json
           git commit -m "chore(feeds): sync wire + real oracle prices [skip ci]"
           git push

@@ -1,0 +1,36 @@
+{
+  "synced": "2026-10-02T08:39:34.996Z",
+  "thresholdPp": 10,
+  "swings": {
+    "Polymarket::Gemini 4.0 released by...? — October 31": {
+      "prev": 89.5,
+      "now": 83.5,
+      "swingPp": -6,
+      "windowHours": 14.7
+    },
+    "Polymarket::Gemini 4.0 released by...? — November 30": {
+      "prev": 97.5,
+      "now": 98.4,
+      "swingPp": 0.9,
+      "windowHours": 14.7
+    },
+    "Polymarket::Gemini 4.0 released by...? — October 15": {
+      "prev": 61,
+      "now": 46.5,
+      "swingPp": -14.5,
+      "windowHours": 14.7
+    },
+    "Polymarket::Gemini 4.0 released by...? — October 5": {
+      "prev": 25.5,
+      "now": 2.7,
+      "swingPp": -22.8,
+      "windowHours": 14.7
+    },
+    "Polymarket::Gemini 4.0 released by...? — October 10": {
+      "prev": 51,
+      "now": 38.5,
+      "swingPp": -12.5,
+      "windowHours": 14.7
+    }
+  }
+}
