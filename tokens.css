@@ -7,7 +7,7 @@
 :root{
   /* ---- primitives: color ---- */
   --void-950:#07080d; --void-900:#0d1017; --void-800:#141826; --void-700:#1c2133;
-  --ink-100:#f8fafc; --ink-200:#e2e8f0; --ink-300:#cbd5e1; --ink-400:#94a3b8; --ink-500:#64748b; --ink-600:#475569;
+  --ink-100:#f8fafc; --ink-200:#e2e8f0; --ink-300:#cbd5e1; --ink-400:#94a3b8; --ink-450:#8b98ad; --ink-500:#64748b; --ink-600:#475569;
   --cyan-400:#00f0ff; --green-500:#10b981; --magenta-500:#ff007f; --gold-400:#facc15;
 
   /* ---- primitives: typography ---- */
@@ -45,7 +45,7 @@
 
   /* ---- semantic tokens ---- */
   --surface-base:var(--void-950); --surface-raised:var(--void-900); --surface-card:var(--void-800);
-  --text-primary:var(--ink-200); --text-heading:var(--ink-100); --text-secondary:var(--ink-400); --text-muted:var(--ink-500);
+  --text-primary:var(--ink-200); --text-heading:var(--ink-100); --text-secondary:var(--ink-400); --text-muted:var(--ink-450); /* 4.9:1 on surface-base — WCAG AA */
   --accent-hyper:var(--cyan-400); --accent-toxic:var(--green-500); --accent-halluc:var(--magenta-500); --accent-panic:var(--gold-400);
   --border-subtle:rgba(255,255,255,.09); --border-strong:rgba(255,255,255,.15);
   --focus-ring:var(--accent-hyper);

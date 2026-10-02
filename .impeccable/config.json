@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [
+      "gradient-text",
+      "dark-glow",
+      "marquee",
+      "codex-grid-background",
+      "radial-halo",
+      "em-dash-overuse",
+      "tiny-text",
+      "wide-tracking"
+    ],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-02T09:15:01.721Z",
+        "reason": "inheritance false positives: body sets text-slate-200 (#e2e8f0, 12.6:1); detector defaults uncolored text to black"
+      }
+    ]
+  }
+}
