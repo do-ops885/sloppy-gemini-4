@@ -773,14 +773,26 @@ async function loadRealOracle() {
     const res = await fetch('real-markets.json', { cache: 'no-store' });
     if (res.ok) data = await res.json();
   } catch (e) { /* file:// or offline -> card stays hidden */ }
+  let swingData = null;
   try {
     const res2 = await fetch('real-history.json', { cache: 'no-store' });
     if (res2.ok) history = await res2.json();
   } catch (e) { /* history optional */ }
+  try {
+    const res3 = await fetch('swings.json', { cache: 'no-store' });
+    if (res3.ok) swingData = await res3.json();
+  } catch (e) { /* swings optional */ }
   if (!data || !Array.isArray(data.items) || !data.items.length) return;
-  renderRealOracle(data.items, data.synced, history && history.series);
+  renderRealOracle(data.items, data.synced, history && history.series, swingData && swingData.swings);
   renderSettled(data.settled || []);
   renderArbitrage(data.items);
+}
+
+function swingBadge(s) {
+  if (!s || !s.swingPp) return '';
+  const dir = s.swingPp > 0 ? 'up' : 'down';
+  const arrow = s.swingPp > 0 ? '\u25B2' : '\u25BC';
+  return `<i class="swing ${dir}">${arrow} ${s.swingPp > 0 ? '+' : ''}${s.swingPp}pp</i>`;
 }
 
 function sparklineSVG(pts, platform) {
@@ -798,7 +810,7 @@ function sparklineSVG(pts, platform) {
   return `<svg class="oracle-spark ${platform.toLowerCase()}" viewBox="0 0 ${w} ${h}" aria-hidden="true">${line}<circle cx="${lx}" cy="${ly}" r="2.2" /></svg>`;
 }
 
-function renderRealOracle(items, synced, series) {
+function renderRealOracle(items, synced, series, swings) {
   el.oracleList.innerHTML = '';
   items.forEach((it) => {
     const pts = series ? series[`${it.platform}::${it.title}`] : null;
@@ -807,7 +819,7 @@ function renderRealOracle(items, synced, series) {
       <span class="oracle-plat ${it.platform.toLowerCase()}">${it.platform.toUpperCase()}</span>
       <span class="oracle-title">${it.title}</span>
       ${sparklineSVG(pts, it.platform)}
-      <span class="oracle-pct">${it.yesPct}%</span>
+      <span class="oracle-pct">${it.yesPct}%${swingBadge(swings && swings[`${it.platform}::${it.title}`])}</span>
       <span class="oracle-vol">VOL ${fmt$(it.volume || 0)}</span>
     </button>`;
     li.querySelector('button').addEventListener('click', () => openDisclosure({
