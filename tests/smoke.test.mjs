@@ -52,6 +52,8 @@ async function suite(reduced) {
   check('partner rail fail-closed by default', doc.getElementById('partner-card').hidden === true);
   check('disclosure modal built', !!doc.getElementById('disclosure-modal'));
   check('oracle card hidden by default (file:// fallback)', doc.getElementById('oracle-card').hidden === true);
+  check('arbitrage board hidden by default', doc.getElementById('arbitrage').hidden === true);
+  check('hall of fame hidden by default', doc.getElementById('hof-card').hidden === true);
   check('countdown ticking format', /^\d{2,}:\d{2}:\d{2}:\d{2}$/.test(doc.getElementById('countdown').textContent));
   check('book sum computed', /%$/.test(doc.getElementById('book-sum').textContent));
   check('favorite sorted first (summer-2027)', doc.querySelector('.card').dataset.id === 'summer-2027');
@@ -112,6 +114,21 @@ async function suite(reduced) {
   await sleep(50);
   check('oracle exit routes via disclosure', !doc.getElementById('disclosure-modal').hidden && doc.getElementById('disclosure-body').textContent.includes('Polymarket'));
   window.__vaporware.closeDisclosure();
+
+  // ---- arbitrage board + hall of fame ----
+  window.__vaporware.renderArbitrage([
+    { platform: 'Polymarket', title: 'Gemini 4.0 released by...? — November 30', yesPct: 97.8, volume: 1, url: 'x' },
+  ]);
+  await sleep(50);
+  check('arbitrage board shown with 5 rows', !doc.getElementById('arbitrage').hidden && doc.querySelectorAll('.arb-row').length === 5);
+  check('arb spread computed with pp units', [...doc.querySelectorAll('.arb-spread')].some((s) => s.textContent.includes('pp')));
+  check('unrateable market marked', doc.getElementById('arb-board').textContent.includes('BEYOND MEASUREMENT'));
+  window.__vaporware.renderSettled([
+    { platform: 'Polymarket', title: 'Gemini 4.0 released by...? — July 31', resolvedYes: false, url: 'x' },
+  ]);
+  await sleep(50);
+  check('hall of fame tombstone rendered', !doc.getElementById('hof-card').hidden && doc.querySelectorAll('.hof-row').length === 1);
+  check('tombstone resolved NO', doc.querySelector('.hof-row').textContent.includes('RESOLVED NO'));
   await sleep(300);
   check('disclosure closes', doc.getElementById('disclosure-modal').hidden === true);
 

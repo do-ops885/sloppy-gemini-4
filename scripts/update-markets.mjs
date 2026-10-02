@@ -18,24 +18,36 @@ try {
   const res = await fetch('https://gamma-api.polymarket.com/public-search?q=gemini&limit_per_type=8', UA);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
+  const settled = [];
   for (const ev of data.events || []) {
     for (const m of ev.markets || []) {
-      if (m.closed || m.active === false) continue;
       if (!/gemini|google/i.test(`${m.question || ''} ${ev.title || ''}`)) continue;
       let prices = [];
       try { prices = JSON.parse(m.outcomePrices || '[]'); } catch { continue; }
       const yes = parseFloat(prices[0]);
       if (!Number.isFinite(yes)) continue;
-      const base = (ev.title || m.question || '').replace(/\.{3}$/, '');
+      const baseTitle = (ev.title || m.question || '').replace(/\.{3}$/, '');
+      const fullTitle = m.groupItemTitle ? `${baseTitle} — ${m.groupItemTitle}` : (m.question || baseTitle);
+      if (m.closed) {
+        settled.push({
+          platform: 'Polymarket',
+          title: fullTitle,
+          resolvedYes: yes >= 0.5,
+          url: `https://polymarket.com/event/${ev.slug}`,
+        });
+        continue;
+      }
+      if (m.active === false) continue;
       items.push({
         platform: 'Polymarket',
-        title: m.groupItemTitle ? `${base} — ${m.groupItemTitle}` : (m.question || base),
+        title: fullTitle,
         yesPct: Math.round(yes * 1000) / 10,
         volume: Math.round(m.volumeNum || 0),
         url: `https://polymarket.com/event/${ev.slug}`,
       });
     }
   }
+  var polySettled = settled;
 } catch (e) { console.warn('polymarket sync skipped:', e.message); }
 
 /* ---- Kalshi (AI-adjacent open events, client-side filtered) ---- */
@@ -77,6 +89,7 @@ const out = {
     ...items.filter((i) => i.platform === 'Polymarket').slice(0, MAX_PER_PLATFORM),
     ...items.filter((i) => i.platform === 'Kalshi').slice(0, MAX_PER_PLATFORM),
   ],
+  settled: (typeof polySettled === 'undefined' ? [] : polySettled).slice(0, 6),
 };
 if (!out.items.length) throw new Error('no real-market items parsed — refusing to blank real-markets.json');
 writeFileSync(OUT, JSON.stringify(out, null, 2) + '\n');
