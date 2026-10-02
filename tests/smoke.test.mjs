@@ -46,7 +46,7 @@ async function suite(reduced) {
   check('feed seeded with 6 items', doc.querySelectorAll('.feed-item').length === 6);
   check('wire items in marquee (7 per group x2)', doc.querySelectorAll('#hype-track .wire-item').length === 14);
   check('wire items labeled WIRE', doc.querySelector('#hype-track .wire-item b').textContent === 'WIRE');
-  check('wire sidebar list rendered', doc.querySelectorAll('#wire-list li').length === 5);
+  check('wire sidebar list rendered (all items)', doc.querySelectorAll('#wire-list li').length === 7);
   check('wire sync date shown', doc.getElementById('wire-sync-date').textContent.length >= 8);
   check('tokens.css linked', !!doc.querySelector('link[href="tokens.css"]'));
   check('partner rail fail-closed by default', doc.getElementById('partner-card').hidden === true);
