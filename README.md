@@ -10,16 +10,11 @@ The hopium is real.
 The site is 100% static at the repo root — Pages can serve it as-is, no build step,
 no workflow.
 
-**One-time enable (needs repo admin, ~10 seconds):**
+**✅ LIVE: https://do-ops885.github.io/sloppy-gemini-4/** (branch deploy, `main` / root —
+every push to `main` redeploys automatically).
 
-1. Open **[Settings → Pages](https://github.com/do-ops885/sloppy-gemini-4/settings/pages)**
-2. **Build and deployment → Source:** `Deploy from a branch`
-3. **Branch:** `main` · folder `/(root)` → **Save**
-4. Wait ~1 minute → live at **https://do-ops885.github.io/sloppy-gemini-4/**
-
-Every push to `main` redeploys automatically. (Pages can't be enabled from the API
-with the current CI token — it lacks the `pages:write` grant — hence the one manual
-click.)
+One manual step remains: installing the sync workflow (the CI token lacks the
+`workflows` grant, so a human copies it in — see **Automation** below).
 
 ## Run it
 
