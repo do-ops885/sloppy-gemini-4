@@ -154,17 +154,17 @@ function cardHTML(m) {
         <i data-lucide="${m.icon}" class="h-5 w-5"></i>
       </div>
       <h3 class="font-display text-lg font-extrabold leading-tight text-white">${m.title}</h3>
-      <p class="mt-1 text-[10px] tracking-[0.24em] text-panic">${m.tag} - ${m.tier}</p>
-      <p class="mt-2 min-h-[3rem] text-xs leading-relaxed text-slate-500">${m.blurb}</p>
+      <p class="mt-1 text-[11px] tracking-[0.18em] text-panic">${m.tag} - ${m.tier}</p>
+      <p class="mt-2 min-h-[3rem] text-xs leading-relaxed text-slate-400">${m.blurb}</p>
       <div class="mt-4 flex items-end justify-between gap-2">
         <div class="odds-num font-mono text-4xl font-bold text-white" data-odds>${m.odds.toFixed(1)}x</div>
         <div class="text-right">
-          <div class="text-[9px] tracking-[0.2em] text-slate-500">IMPLIED HYPE</div>
+          <div class="text-[11px] tracking-[0.14em] text-slate-400">IMPLIED HYPE</div>
           <div class="font-mono text-sm font-bold text-hyper" data-share>--%</div>
         </div>
       </div>
       <div class="bar mt-2"><div class="bar-fill" data-bar style="--p:0"></div></div>
-      <div class="mt-3 flex items-center justify-between text-[9px] tracking-[0.16em] text-slate-500">
+      <div class="mt-3 flex items-center justify-between text-[11px] tracking-[0.1em] text-slate-400">
         <span>VOL <span class="text-slate-300" data-vol>$0</span></span>
         <span>SETTLES: VIBES ORACLE</span>
       </div>
@@ -387,7 +387,7 @@ function pushFeed(html, kind = 'bet') {
   li.innerHTML = `<i data-lucide="${FEED_ICONS[kind]}" class="mt-0.5 h-4 w-4 shrink-0 ${FEED_COLORS[kind]}"></i>
     <div class="min-w-0">
       <div class="leading-snug">${html}</div>
-      <div class="mt-0.5 text-[9px] tracking-[0.18em] text-slate-500">${new Date().toLocaleTimeString('en-GB')} · TX-${Math.random().toString(16).slice(2, 8).toUpperCase()}</div>
+      <div class="mt-0.5 text-[11px] tracking-[0.08em] text-slate-400">${new Date().toLocaleTimeString('en-GB')} · TX-${Math.random().toString(16).slice(2, 8).toUpperCase()}</div>
     </div>`;
   el.feed.prepend(li);
   icons();
@@ -589,7 +589,7 @@ function toast(title, sub) {
   t.className = 'toast';
   t.innerHTML = `<i data-lucide="party-popper" class="h-5 w-5 text-toxic"></i>
     <div><div class="font-bold text-toxic">${title}</div>
-    <div class="text-[10px] tracking-wide text-slate-400">${sub}</div></div>`;
+    <div class="text-[11px] tracking-wide text-slate-400">${sub}</div></div>`;
   el.toastRoot.appendChild(t);
   icons();
   requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('in')));

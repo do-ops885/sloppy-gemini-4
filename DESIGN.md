@@ -49,6 +49,28 @@ never at users. Real wire items are plainly labeled WIRE with source + date.
 Selection `bg-halluc`; thin palette scrollbars; `:focus-visible` ring in accent-hyper;
 caret in accent-hyper; tabular numerals on all data readouts.
 
+## Anti-slop pass (impeccable detect, 2026-10-02)
+
+Ran the vendored detector and fixed everything real, then registered the earned
+choices in `.impeccable/config.json`:
+
+**Fixed:** muted-text contrast (`--text-muted` → `ink-450` #8b98ad, 4.9:1 on void;
+slate-500→400 on meta text; `.server-box` to `text-secondary`), functional-text
+floor raised to 11px across pills/labels/readouts (legal smallprint stays 10px),
+tracking tightened to ≤0.16em on longer strings, hero kicker moved below the CTA
+row (no eyebrow-on-h1), noise texture made visible (0.16 — a choice, not a token),
+info-card h3 bumped to repair the 1.25:1 type step.
+
+**Ignored with reasons (brief-earned):** `gradient-text` + `dark-glow` (neon world),
+`marquee` (the product is a ticker), `codex-grid-background` (measurement surface),
+`radial-halo` (ambient void), `em-dash-overuse` + `tiny-text` (wire voice; floors
+still enforced), `wide-tracking` (tracked caps only on short uppercase labels),
+`low-contrast=* [index.html]` (detector inheritance miss — body is slate-200).
+
+Re-run: `.agents/skills/impeccable/scripts/impeccable detect index.html styles.css app.js`
+→ 0 anti-patterns. New one-off values must earn their ignore in the config, in
+writing, or they don't ship.
+
 ## Accessibility
 Reduced-motion parity everywhere (opacity fades, static viz, no confetti); ESC closes
 drawer + focus return; focus trap in drawer; aria-pressed on SFX toggle; aria-live
